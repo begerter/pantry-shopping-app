@@ -4,6 +4,11 @@ import FoodItem from './foodItem.react';
 import Food from '../models/food';
 import EditFoodItem from './editFoodItem.react';
 
+const separatorStyle = {
+  height: 1,
+  backgroundColor: '#CCCCCC'
+};
+
 export default class FoodList extends Component {
   // Initialize the hardcoded data
   constructor(props) {
@@ -33,10 +38,17 @@ export default class FoodList extends Component {
         <ListView
           dataSource={this.state.dataSource}
           renderRow={(rowData) => <FoodItem foodItem={rowData} removeItem={removeItem} />}
+          renderSeparator={this.renderSeparator}
         />
 
         <EditFoodItem visible={this.state.addModalVisible} hideFunc={hideAdd} addFunc={addItem} />
       </View>
+    );
+  }
+
+  renderSeparator(sectionId, rowId) {
+    return (
+      <View key={`${sectionId}-${rowId}`} style={separatorStyle} />
     );
   }
 

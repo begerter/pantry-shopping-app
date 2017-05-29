@@ -33,10 +33,10 @@ export default class AmountEditor extends Component {
     }
 
     return (
-      <View  style={{flex: 1, flexDirection: 'row', justifyContent: 'center', height: 25}}>
+      <View  style={{flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
         <Button onPress={onDecrement} buttonStyle={buttonStyle} content='-' />
         <TextInput keyboardType='numeric' value={amount}
-          onChangeText={(text) => onUpdate(text)} style={{height: 25}}/>
+          onChangeText={(text) => onUpdate(text)} style={{height: 40}}/>
         <Button onPress={onIncrement} buttonStyle={buttonStyle} content='+' />
       </View>
     );

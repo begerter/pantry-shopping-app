@@ -3,7 +3,8 @@ import { AppRegistry, Text, View, Button } from 'react-native';
 
 const itemViewStyle = {
   flex: 1,
-  flexDirection: 'row'
+  flexDirection: 'row',
+  padding: 10
 };
 
 export default class FoodItem extends Component {
