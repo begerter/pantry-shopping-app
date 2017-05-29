@@ -1,0 +1,3 @@
+rootProject.name = 'pantry'
+
+include ':app'
