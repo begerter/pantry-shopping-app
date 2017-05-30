@@ -12,7 +12,11 @@ export default class UnitEditor extends Component {
   constructor(props) {
     super(props);
 
-    this.state = Object.assign({}, initialState);
+    if (props.value) {
+      this.state = {unit: props.value};
+    } else {
+      this.state = Object.assign({}, initialState);
+    }
   }
 
   render() {

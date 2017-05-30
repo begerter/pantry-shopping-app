@@ -13,7 +13,7 @@ export default class FoodList extends Component {
   // Initialize the hardcoded data
   constructor(props) {
     super(props);
-    const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+    const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1.toString() !== r2.toString()});
 
     const initialData = [];
 
@@ -23,7 +23,7 @@ export default class FoodList extends Component {
       addModalVisible: false
     };
 
-    this.itemIndex = 0;
+    this.itemIndex = 1;
   }
 
   render() {
@@ -42,7 +42,7 @@ export default class FoodList extends Component {
           renderSeparator={this.renderSeparator}
         />
 
-        <EditFoodItem visible={this.state.addModalVisible} hideFunc={hideAdd} addFunc={addItem} />
+        <EditFoodItem visible={this.state.addModalVisible} hideFunc={hideAdd} addFunc={addItem} editingItem={this.state.editingItem} />
       </View>
     );
   }
@@ -54,19 +54,34 @@ export default class FoodList extends Component {
   }
 
   addFoodData(foodData) {
-    const foodItem = new Food(foodData.description, foodData.amount, foodData.units, this.itemIndex);
-    this.itemIndex++;
-    this.state.data.push(foodItem);
+    // modifying items in this.state.data wouldn't refresh view, so creating new list instead
+    let newDataList = null;
+
+    if (foodData.index) {
+      newDataList = this.state.data.map((datum => {
+        if (datum.index !== foodData.index) {
+          return datum;
+        } else {
+          return new Food(foodData.description, foodData.amount, foodData.units, foodData.index);
+        }
+      }));
+    } else {
+      const foodItem = new Food(foodData.description, foodData.amount, foodData.units, this.itemIndex);
+      this.itemIndex++;
+      this.state.data.push(foodItem);
+    }
+
 
     this.setState({
-      data: this.state.data,
-      dataSource: this.state.dataSource.cloneWithRows(this.state.data),
-      addModalVisible: false
+      data: newDataList? newDataList : this.state.data,
+      dataSource: this.state.dataSource.cloneWithRows(newDataList? newDataList : this.state.data),
+      addModalVisible: false,
+      editingItem: null
     });
   }
 
-  editFoodData(index) {
-
+  editFoodData(editingItem) {
+    this.setState({addModalVisible: true, editingItem});
   }
 
   removeFoodData(index) {
@@ -84,7 +99,7 @@ export default class FoodList extends Component {
   }
 
   hideAddFunc() {
-    this.setState({addModalVisible: false});
+    this.setState({addModalVisible: false, editingItem: null});
   }
 
   showAddFunc() {

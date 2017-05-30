@@ -31,7 +31,7 @@ export default class FoodItem extends Component {
   }
 
   editItem() {
-    this.props.editItem(this.props.foodItem.index);
+    this.props.editItem(this.props.foodItem);
   }
 
   removeItem() {
