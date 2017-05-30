@@ -31,13 +31,14 @@ export default class FoodList extends Component {
     const hideAdd = this.hideAddFunc.bind(this);
     const addItem = this.addFoodData.bind(this);
     const removeItem = this.removeFoodData.bind(this);
+    const editItem = this.editFoodData.bind(this);
 
     return (
       <View style={{flex: 1, paddingTop: 22}}>
         <Button title='add' onPress={showAdd} />
         <ListView
           dataSource={this.state.dataSource}
-          renderRow={(rowData) => <FoodItem foodItem={rowData} removeItem={removeItem} />}
+          renderRow={(rowData) => <FoodItem foodItem={rowData} removeItem={removeItem} editItem={editItem} />}
           renderSeparator={this.renderSeparator}
         />
 
@@ -62,6 +63,10 @@ export default class FoodList extends Component {
       dataSource: this.state.dataSource.cloneWithRows(this.state.data),
       addModalVisible: false
     });
+  }
+
+  editFoodData(index) {
+
   }
 
   removeFoodData(index) {
