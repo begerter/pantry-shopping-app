@@ -1,13 +1,8 @@
 import React, { Component } from 'react';
-import { AppRegistry, Text, View } from 'react-native';
+import { Text } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Button from './button.react';
-
-const itemViewStyle = {
-  flex: 1,
-  flexDirection: 'row',
-  padding: 10
-};
+import { Container, Right, Body, ListItem } from 'native-base';
 
 const iconButtonStyle = {
   backgroundColor: '#FFF'
@@ -22,11 +17,13 @@ export default class FoodItem extends Component {
     const edit = (<Icon name='pencil' size={30} color='#000' />)
 
     return (
-      <View style={itemViewStyle}>
-        <Text>{food}</Text>
-        <Button content={edit} onPress={onEdit} buttonStyle={iconButtonStyle} />
-        <Button content={trash} onPress={onRemove} buttonStyle={iconButtonStyle} />
-      </View>
+      <ListItem icon>
+        <Body><Text>{food}</Text></Body>
+        <Right>
+          <Button content={edit} onPress={onEdit} buttonStyle={iconButtonStyle} />
+          <Button content={trash} onPress={onRemove} buttonStyle={iconButtonStyle} />
+        </Right>
+      </ListItem>
     );
   }
 
@@ -38,6 +35,3 @@ export default class FoodItem extends Component {
     this.props.removeItem(this.props.foodItem.index);
   }
 }
-
-// App registration and rendering
-AppRegistry.registerComponent('FoodItem', () => FoodItem);

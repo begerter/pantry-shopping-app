@@ -1,36 +1,25 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
-
 import React, { Component } from 'react';
 import FoodList from './src/components/foodList.react';
 import EditFoodItem from './src/components/editFoodItem.react';
-import {
-  AppRegistry,
-  StyleSheet,
-  Text,
-  View
-} from 'react-native';
+import { AppRegistry, Text } from 'react-native';
+import { Container, Content, Tab, Tabs, Title, Header } from 'native-base';
 
 export default class pantry extends Component {
   render() {
     return (
-      <View style={styles.container}>
-        <FoodList />
-      </View>
+      <Container>
+        <Header><Title>pantry</Title></Header>
+        <Tabs>
+          <Tab heading="Shopping List">
+            <FoodList />
+          </Tab>
+          <Tab heading="My Pantry">
+            <Text>tab2</Text>
+          </Tab>
+        </Tabs>
+      </Container>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  }
-});
 
 AppRegistry.registerComponent('pantry', () => pantry);
