@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { AppRegistry, TextInput, View} from 'react-native';
-import Button from './button.react';
+import { TextInput } from 'react-native';
+import { Button, Item, Icon } from 'native-base';
 
 const initialState = {
   amount: '0'
@@ -37,12 +37,16 @@ export default class AmountEditor extends Component {
     }
 
     return (
-      <View  style={{flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
-        <Button onPress={onDecrement} buttonStyle={buttonStyle} content='-' />
+      <Item underline style={{justifyContent: 'center'}}>
+        <Button transparent onPress={onDecrement}>
+          <Icon name='remove' />
+        </Button>
         <TextInput keyboardType='numeric' value={amount}
-          onChangeText={(text) => onUpdate(text)} style={{height: 40}}/>
-        <Button onPress={onIncrement} buttonStyle={buttonStyle} content='+' />
-      </View>
+          onChangeText={(text) => onUpdate(text)} />
+        <Button transparent onPress={onIncrement}>
+          <Icon name='add' />
+        </Button>
+      </Item>
     );
   }
 
@@ -74,6 +78,3 @@ export default class AmountEditor extends Component {
     this.props.onUpdate(num);
   }
 }
-
-// App registration and rendering
-AppRegistry.registerComponent('AmountEditor', () => AmountEditor);

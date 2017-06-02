@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { Button } from 'react-native';
+import { Text } from 'react-native';
 import FoodItem from './foodItem.react';
 import Food from '../models/food';
 import EditFoodItem from './editFoodItem.react';
-import { List, Container } from 'native-base';
+import { List, Container, Footer, Button, Body, Icon } from 'native-base';
 
 export default class FoodList extends Component {
   // Initialize the hardcoded data
@@ -27,13 +27,20 @@ export default class FoodList extends Component {
 
     return (
       <Container>
-        <Button title='add' onPress={showAdd} />
         <List dataArray={this.state.data}
           renderRow={(item) =>
             <FoodItem foodItem={item} removeItem={removeItem} editItem={editItem} />
           }>
         </List>
         <EditFoodItem visible={this.state.addModalVisible} hideFunc={hideAdd} addFunc={addItem} editingItem={this.state.editingItem} />
+        <Footer>
+          <Body>
+            <Button iconLeft primary full onPress={showAdd} >
+              <Icon name='add' />
+              <Text style={{color: '#FFF'}}>Add</Text>
+            </Button>
+          </Body>
+        </Footer>
       </Container>
     );
   }

@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { AppRegistry, TextInput, Modal, View } from 'react-native';
+import { Modal, Text } from 'react-native';
 import AmountEditor from './amountEditor.react';
-import UnitEditor from './unitEditor.react';
-import Button from './button.react';
+import UnitQuickSelectors from './unitQuickSelectors.react';
+import { Container, Form, Content, Header, Button, Icon, Body, Title, Left, Item, Label, Input } from 'native-base';
 
 const initialState = {
   description: '',
@@ -32,24 +32,40 @@ export default class EditFoodItem extends Component {
   render() {
     const onAddPress = this.addItem.bind(this);
     const actionText = this.props.editingItem ? 'SAVE' : 'ADD';
+    const headerText = this.props.editingItem ? 'Edit Item' : 'Add Item';
 
     return (
-      <Modal visible={this.props.visible} onRequestClose={this.props.hideFunc} style={{flex: 1, justifyContent: 'flex-start'}} >
-        <View style={{flex: 1, flexDirection: 'column', justifyContent: 'flex-start' }} >
-          <View style={{height: 50}}>
-            <AmountEditor onUpdate={(amount) => this.setState({amount: amount})} value={this.state.amount}/>
-          </View>
-          <View style={{height: 100}}>
-            <UnitEditor onUpdate={(unit) => this.setState({units: unit})} value={this.state.units}/>
-          </View>
-          <View style={{height: 50}}>
-            <TextInput placeholder='item to buy' onChangeText={(text) => this.setState({description: text})} value={this.state.description} />
-          </View>
-          <View style={{flex: 1, flexDirection: 'row', height: 50, justifyContent: 'center'}} >
-            <Button content={actionText} onPress={onAddPress} buttonStyle={{backgroundColor:'#003D00'}} textStyle={{color:'white'}}/>
-            <Button content='CANCEL' onPress={this.props.hideFunc} />
-          </View>
-        </View>
+      <Modal visible={this.props.visible} onRequestClose={this.props.hideFunc} >
+        <Container>
+          <Header>
+            <Left>
+              <Button transparent onPress={this.props.hideFunc}>
+                <Icon name='arrow-back' />
+              </Button>
+            </Left>
+            <Body>
+              <Title>{headerText}</Title>
+            </Body>
+          </Header>
+          <Content>
+            <Form>
+              <AmountEditor onUpdate={(amount) => this.setState({amount: amount})} value={this.state.amount}/>
+              <Item underline>
+                <Label>Units</Label>
+                <Input value={this.state.units}
+                  onChangeText={(unit) => this.setState({units: unit})} />
+              </Item>
+              <UnitQuickSelectors onUpdate={(unit) => this.setState({units: unit})} />
+              <Item underline>
+                <Label>Description</Label>
+                <Input onChangeText={(text) => this.setState({description: text})} value={this.state.description} />
+              </Item>
+              <Button primary block onPress={onAddPress} >
+                <Text style={{color: '#FFF'}}>{actionText}</Text>
+              </Button>
+            </Form>
+          </Content>
+        </Container>
       </Modal>
     );
   }
@@ -68,6 +84,3 @@ export default class EditFoodItem extends Component {
     this.props.addFunc(newItem);
   }
 }
-
-// App registration and rendering
-AppRegistry.registerComponent('EditFoodItem', () => EditFoodItem);

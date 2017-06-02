@@ -8,7 +8,6 @@ export default class pantry extends Component {
   render() {
     return (
       <Container>
-        <Header><Title>pantry</Title></Header>
         <Tabs>
           <Tab heading="Shopping List">
             <FoodList />
