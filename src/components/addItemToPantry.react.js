@@ -3,15 +3,17 @@ import { Modal, Text } from 'react-native';
 import ModalEditor from './modalEditor.react';
 import AmountEditor from './amountEditor.react';
 import UnitQuickSelectors from './unitQuickSelectors.react';
+import TimeEditor from './timeEditor.react';
 import { Item, Label, Input } from 'native-base';
 
 const initialState = {
   description: '',
   units: '',
-  amount: ''
+  amount: '',
+  time: ''
 };
 
-export default class EditFoodItem extends ModalEditor {
+export default class AddItemToPantry extends ModalEditor {
   constructor(props) {
     super(props);
 
@@ -19,11 +21,12 @@ export default class EditFoodItem extends ModalEditor {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.editingItem) {
+    if (nextProps.itemToAdd) {
       this.setState({
         description: nextProps.editingItem.description,
         units: nextProps.editingItem.units,
-        amount: nextProps.editingItem.amount
+        amount: nextProps.editingItem.amount,
+        time: ''
       });
     } else {
       this.setState(Object.assign({}, initialState));
@@ -31,11 +34,11 @@ export default class EditFoodItem extends ModalEditor {
   }
 
   getModalHeaderText() {
-    return this.props.editingItem ? 'Edit Item' : 'Add Item';
+    return this.props.itemToAdd ? `Add ${this.props.itemToAdd.description} to pantry`: 'Add to pantry';
   }
 
   getActionButtonText() {
-    return this.props.editingItem ? 'Edit Item' : 'Add Item';
+    return 'Add';
   }
 
   renderFormInputItems() {
@@ -47,10 +50,7 @@ export default class EditFoodItem extends ModalEditor {
           onChangeText={(unit) => this.setState({units: unit})} />
       </Item>,
       <UnitQuickSelectors onUpdate={(unit) => this.setState({units: unit})} key='quickUnits'/>,
-      <Item underline key='description'>
-        <Label>Description</Label>
-        <Input onChangeText={(text) => this.setState({description: text})} value={this.state.description} />
-      </Item>
+      <TimeEditor />
     ];
 
     return items;

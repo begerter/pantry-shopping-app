@@ -6,7 +6,17 @@ export default class Food {
     this.units = units;
     this.index = index;
   }
+
   toString() {
     return this.amount + ' ' + this.units + ' ' + this.description;
   }
+
+  removeQuantity(amount, units) {
+    if (units === this.units) {
+      this.amount = this.amount - amount;
+    } else {
+      // do some arcane unit conversions
+    }
+  }
+
 }
