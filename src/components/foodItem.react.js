@@ -10,6 +10,7 @@ export default class FoodItem extends Component {
   render() {
     const onRemove = this.removeItem.bind(this);
     const onEdit = this.editItem.bind(this);
+    const onTransfer = this.transferItem.bind(this);
     const food = this.props.foodItem.toString();
 
     return (
@@ -19,7 +20,7 @@ export default class FoodItem extends Component {
           <Button onPress={onEdit} transparent>
             <Icon name='redo' />
           </Button>
-          <Button transparent>
+          <Button onPress={onTransfer} transparent>
             <Icon name='cart' />
           </Button>
           <Button onPress={onRemove} transparent>
@@ -36,5 +37,9 @@ export default class FoodItem extends Component {
 
   removeItem() {
     this.props.removeItem(this.props.foodItem.index);
+  }
+
+  transferItem() {
+    this.props.transferItem(this.props.foodItem);
   }
 }

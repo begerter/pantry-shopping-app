@@ -1,9 +1,15 @@
 
+const FOOD_TYPES = {
+  shopping: 'SHOPPING',
+  pantry: 'PANTRY'
+};
+
 export default class Food {
-  constructor(description, amount, units, index) {
+  constructor(description, amount, units, type, index) {
     this.description = description;
     this.amount = amount;
     this.units = units;
+    this.type = type;
     this.index = index;
   }
 
@@ -18,5 +24,6 @@ export default class Food {
       // do some arcane unit conversions
     }
   }
-
 }
+
+export {FOOD_TYPES};

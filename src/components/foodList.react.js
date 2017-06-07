@@ -12,7 +12,7 @@ export default class FoodList extends Component {
         <List dataArray={this.props.data}
           renderRow={(item) =>
             <FoodItem foodItem={item}
-              removeItem={this.props.onRemove} editItem={this.props.onEdit} />
+              removeItem={this.props.onRemove} editItem={this.props.onEdit} transferItem={this.props.onTransfer} />
           }>
         </List>
         <Footer>

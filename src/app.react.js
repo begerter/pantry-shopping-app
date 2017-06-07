@@ -5,7 +5,7 @@ import TimeBasedFoodList from './components/timeBasedFoodList.react';
 import EditPantryItem from './components/addItemToPantry.react';
 import { Text } from 'react-native';
 import { Container, Content, Tab, Tabs, Title, Header } from 'native-base';
-import Food from './models/food';
+import Food, { FOOD_TYPES } from './models/food';
 
 
 export default class App extends Component {
@@ -31,7 +31,7 @@ export default class App extends Component {
             <FoodList data={this.state.shoppingListData}
               onEdit={this.editShoppingListData.bind(this)}
               onRemove={this.removeShoppingListData.bind(this)}
-              hideEdit={this.hideShoppingListModal.bind(this)} />
+              onTransfer={this.editPantryData.bind(this)} />
           </Tab>
           <Tab heading="My Pantry">
             <TimeBasedFoodList data={this.state.pantryData} />
@@ -43,7 +43,7 @@ export default class App extends Component {
           editingItem={this.state.editingItem} />
         <EditPantryItem visible={this.state.addToPantryModalOpen}
           hideFunc={this.hidePantryModal.bind(this)}
-          addFunc={null}
+          saveFunc={this.savePantryData.bind(this)}
           editingItem={this.state.editingItem} />
       </Container>
     );
@@ -66,11 +66,11 @@ export default class App extends Component {
         if (datum.index !== data.index) {
           return datum;
         } else {
-          return new Food(data.description, data.amount, data.units, data.index);
+          return new Food(data.description, data.amount, data.units, FOOD_TYPES.shopping, data.index);
         }
       }));
     } else {
-      const foodItem = new Food(data.description, data.amount, data.units, this.shoppingItemIndex);
+      const foodItem = new Food(data.description, data.amount, data.units, FOOD_TYPES.shopping, this.shoppingItemIndex);
       this.shoppingItemIndex++;
       this.state.shoppingListData.push(foodItem);
     }
@@ -94,6 +94,10 @@ export default class App extends Component {
     this.setState({
       shoppingListData: newData,
     });
+  }
+
+  savePantryData(data, shoppingIndexToRemove) {
+
   }
 
   editPantryData(editingItem) {

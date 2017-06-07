@@ -4,7 +4,10 @@ import ModalEditor from './modalEditor.react';
 import AmountEditor from './amountEditor.react';
 import UnitQuickSelectors from './unitQuickSelectors.react';
 import TimeEditor from './timeEditor.react';
+import TimeQuickSelectors from './timeQuickSelectors.react';
 import { Item, Label, Input } from 'native-base';
+import { FOOD_TYPES } from '../models/food';
+import moment from 'moment';
 
 const initialState = {
   description: '',
@@ -21,12 +24,12 @@ export default class AddItemToPantry extends ModalEditor {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.itemToAdd) {
+    if (nextProps.editingItem) {
       this.setState({
         description: nextProps.editingItem.description,
         units: nextProps.editingItem.units,
         amount: nextProps.editingItem.amount,
-        time: ''
+        time: nextProps.editingItem.time
       });
     } else {
       this.setState(Object.assign({}, initialState));
@@ -34,10 +37,20 @@ export default class AddItemToPantry extends ModalEditor {
   }
 
   getModalHeaderText() {
-    return this.props.itemToAdd ? `Add ${this.props.itemToAdd.description} to pantry`: 'Add to pantry';
+    if (this.props.editingItem && this.props.editingItem.type === FOOD_TYPES.shopping) {
+      return `Move ${this.props.editingItem.description} to pantry`;
+    } else if (this.props.editingItem) {
+      return 'Edit Pantry Item';
+    }
+    return 'Add to pantry';
   }
 
   getActionButtonText() {
+    if (this.props.editingItem && this.props.editingItem.type === FOOD_TYPES.shopping) {
+      return 'Move';
+    } else if (this.props.editingItem) {
+      return 'Save';
+    }
     return 'Add';
   }
 
@@ -50,23 +63,33 @@ export default class AddItemToPantry extends ModalEditor {
           onChangeText={(unit) => this.setState({units: unit})} />
       </Item>,
       <UnitQuickSelectors onUpdate={(unit) => this.setState({units: unit})} key='quickUnits'/>,
-      <TimeEditor />
+      <TimeEditor onUpdate={(date) => this.setState({time: date})} value={this.state.time} />,
+      <TimeQuickSelectors onUpdate={this.setTime.bind(this)} />
     ];
 
     return items;
+  }
+
+  setTime(increment, unit) {
+    this.setState({time: moment().add(increment, unit).format('L')})
   }
 
   doAction() {
     const newItem = {
       description: this.state.description,
       units: this.state.units,
-      amount: this.state.amount
+      amount: this.state.amount,
+      time: this.state.time
     };
 
-    if (this.props.editingItem) {
+    let itemIndexToRemove = null;
+    // only keep index around if editing, not if moving or adding
+    if (this.props.editingItem && this.props.editingItem.type === FOOD_TYPES.pantry) {
       newItem.index = this.props.editingItem.index;
+    } else if (this.props.editingItem) {
+      itemIndexToRemove = this.props.editingItem.index;
     }
 
-    this.props.addFunc(newItem);
+    this.props.saveFunc(newItem, itemIndexToRemove ? itemIndexToRemove : null);
   }
 }
