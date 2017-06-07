@@ -5,6 +5,8 @@ import TimeBasedFoodList from './components/timeBasedFoodList.react';
 import EditPantryItem from './components/addItemToPantry.react';
 import { Text } from 'react-native';
 import { Container, Content, Tab, Tabs, Title, Header } from 'native-base';
+import Food from './models/food';
+
 
 export default class App extends Component {
   constructor(props) {
@@ -26,15 +28,18 @@ export default class App extends Component {
       <Container>
         <Tabs>
           <Tab heading="Shopping List">
-            <FoodList data={this.state.pantryData} />
+            <FoodList data={this.state.shoppingListData}
+              onEdit={this.editShoppingListData.bind(this)}
+              onRemove={this.removeShoppingListData.bind(this)}
+              hideEdit={this.hideShoppingListModal.bind(this)} />
           </Tab>
           <Tab heading="My Pantry">
-            <TimeBasedFoodList data={this.state.shoppingListData} />
+            <TimeBasedFoodList data={this.state.pantryData} />
           </Tab>
         </Tabs>
         <EditFoodItem visible={this.state.addToShoppingListModalOpen}
           hideFunc={this.hideShoppingListModal.bind(this)}
-          addFunc={null}
+          saveFunc={this.saveShoppingListData.bind(this)}
           editingItem={this.state.editingItem} />
         <EditPantryItem visible={this.state.addToPantryModalOpen}
           hideFunc={this.hidePantryModal.bind(this)}
@@ -52,8 +57,43 @@ export default class App extends Component {
     this.setState({addToShoppingListModalOpen: false, editingItem: null});
   }
 
-  addShoppingListData() {
-    this.setState({addToShoppingListModalOpen: true});
+  saveShoppingListData(data) {
+    // modifying items in this.state.data wouldn't refresh view, so creating new list instead
+    let newDataList = null;
+
+    if (data.index) {
+      newDataList = this.state.shoppingListData.map((datum => {
+        if (datum.index !== data.index) {
+          return datum;
+        } else {
+          return new Food(data.description, data.amount, data.units, data.index);
+        }
+      }));
+    } else {
+      const foodItem = new Food(data.description, data.amount, data.units, this.shoppingItemIndex);
+      this.shoppingItemIndex++;
+      this.state.shoppingListData.push(foodItem);
+    }
+
+
+    this.setState({
+      shoppingListData: newDataList? newDataList : this.state.shoppingListData,
+      addToShoppingListModalOpen: false,
+      editingItem: null
+    });
+  }
+
+  removeShoppingListData(index) {
+    const newData = [];
+    this.state.shoppingListData.forEach(food => {
+      if (food.index != index) {
+        newData.push(food);
+      }
+    });
+
+    this.setState({
+      shoppingListData: newData,
+    });
   }
 
   editPantryData(editingItem) {

@@ -67,6 +67,6 @@ export default class EditFoodItem extends ModalEditor {
       newItem.index = this.props.editingItem.index;
     }
 
-    this.props.addFunc(newItem);
+    this.props.saveFunc(newItem);
   }
 }
