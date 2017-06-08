@@ -16,7 +16,7 @@ const initialState = {
   time: null
 };
 
-export default class ShoppingList extends ModalEditor {
+export default class EditPantryItem extends ModalEditor {
   constructor(props) {
     super(props);
 

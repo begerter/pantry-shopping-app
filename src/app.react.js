@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
+import { Text } from 'react-native';
+import { Container, Content, Tab, Tabs, Title, Header } from 'native-base';
 import ShoppingList from './components/shoppingList.react';
 import EditShoppingListItem from './components/editShoppingListItem.react';
 import PantryList from './components/pantryList.react';
 import EditPantryItem from './components/editPantryItem.react';
-import { Text } from 'react-native';
-import { Container, Content, Tab, Tabs, Title, Header } from 'native-base';
+import ConsumePantryItem from './components/consumePantryItem.react';
 import Food, { FOOD_TYPES } from './models/food';
 
 function removeIndexFromList(list, index) {
@@ -25,12 +26,15 @@ export default class App extends Component {
     this.state = {
       addToShoppingListModalOpen: false,
       addToPantryModalOpen: false,
+      consumeFromPantryModalOpen: false,
       shoppingListData: [],
-      pantryData: []
+      pantryData: [new Food('milk', '3', 'pnt', '06/10/2017', FOOD_TYPES.pantry, 1)
+    ]
     };
 
     this.shoppingItemIndex = 1;
-    this.pantryItemIndex = 1;
+    this.pantryItemIndex = 2;
+    //this.pantryItemIndex = 1;
   }
 
   render() {
@@ -57,6 +61,10 @@ export default class App extends Component {
         <EditPantryItem visible={this.state.addToPantryModalOpen}
           hideFunc={this.hidePantryModal.bind(this)}
           saveFunc={this.savePantryData.bind(this)}
+          editingItem={this.state.editingItem} />
+        <ConsumePantryItem visible={this.state.consumeFromPantryModalOpen}
+          hideFunc={this.hideConsumeModal.bind(this)}
+          saveFunc={this.consumeFromPantry.bind(this)}
           editingItem={this.state.editingItem} />
       </Container>
     );
@@ -138,8 +146,36 @@ export default class App extends Component {
     });
   }
 
+  hideConsumeModal() {
+    this.setState({consumeFromPantryModalOpen: false, editingItem: null});
+  }
+
+  consumeFromPantry(data) {
+    const newDataList = [];
+
+    this.state.pantryData.forEach(pantryItem => {
+      if (pantryItem.index !== data.index) {
+        newData.push(pantryItem);
+      } else {
+        if (data.units === pantryItem.units && data.amount !== pantryItem.amount) {
+          pantryItem.amount = pantryItem.amount - data.amount;
+          newData.push(pantryItem);
+        } else if (data.units !== pantryItem.units) {
+          // todo: unit conversions
+          newData.push(pantryItem);
+        }
+      }
+    });
+
+    this.setState({
+      pantryData: newDataList,
+      consumeFromPantryModalOpen: false,
+      editingItem: null
+    });
+  }
+
   consumePantryListData(editingItem) {
-    // todo
+    this.setState({consumeFromPantryModalOpen: true, editingItem});
   }
 
   editPantryData(editingItem) {
