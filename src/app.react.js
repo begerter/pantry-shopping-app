@@ -25,12 +25,11 @@ export default class App extends Component {
     this.state = {
       addToShoppingListModalOpen: false,
       addToPantryModalOpen: false,
-      shoppingListData: [new Food('milk', '1', 'pint', null, FOOD_TYPES.shopping, 1)],
+      shoppingListData: [],
       pantryData: []
     };
 
-    this.shoppingItemIndex = 2;
-    //this.shoppingItemIndex = 1;
+    this.shoppingItemIndex = 1;
     this.pantryItemIndex = 1;
   }
 

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Text } from 'react-native';
 import Food from '../models/food';
-import { List, Container, Footer, Button, Body, Icon, Separator } from 'native-base';
+import { List, Container, Footer, Button, Body, Icon, Separator, ListItem, Content } from 'native-base';
 import PantryListItem from './pantryListItem.react';
 import moment from 'moment';
 
@@ -15,7 +15,9 @@ export default class PantryList extends Component {
 
     return (
       <Container>
-        {this.renderLists(this.getDataBuckets())}
+        <Content>
+          {this.renderLists(this.getDataBuckets())}
+        </Content>
         <Footer>
           <Body>
             <Button iconLeft primary full onPress={showAdd} >
@@ -63,25 +65,31 @@ export default class PantryList extends Component {
 
     dataLists.forEach((data) => {
       if (data.dataList.length > 0) {
-        renderList.push(
-          <Separator bordered key={data.header} style={separatorStyle}>
-            <Text>{data.header}</Text>
-          </Separator>
-        );
-        renderList.push(
-          <List dataArray={data.dataList} key = {`list-${data.header}`}
-            renderRow={(item) =>
-              <PantryListItem foodItem={item}
-                removeItem={this.props.onRemove}
-                editItem={this.props.onEdit}
-                consumeItem={this.props.onConsume} />
-            }>
-          </List>
-        );
+        renderList.push(this.renderListSeparator(data.header));
+        data.dataList.forEach((item) => {
+          renderList.push(this.renderListItem(item))
+        });
       }
     });
 
     return renderList;
+  }
+
+  renderListSeparator(headerText) {
+    return (
+      <ListItem itemDivider bordered key={headerText} >
+        <Text>{headerText}</Text>
+      </ListItem>
+    );
+  }
+
+  renderListItem(item) {
+    return (
+      <PantryListItem foodItem={item} key={item.index}
+        removeItem={this.props.onRemove}
+        editItem={this.props.onEdit}
+        consumeItem={this.props.onConsume} />
+    );
   }
 
   showAddFunc() {
