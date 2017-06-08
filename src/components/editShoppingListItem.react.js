@@ -11,7 +11,7 @@ const initialState = {
   amount: ''
 };
 
-export default class EditFoodItem extends ModalEditor {
+export default class EditShoppingListItem extends ModalEditor {
   constructor(props) {
     super(props);
 

@@ -6,15 +6,6 @@ const initialState = {
   amount: '0'
 };
 
-const buttonStyle={
-  height: 25,
-  width: 25,
-  borderRadius: 5,
-  backgroundColor: '#d3d3d3',
-  paddingLeft: 10,
-  paddingTop: 3
-};
-
 export default class AmountEditor extends Component {
   constructor(props) {
     super(props);
@@ -41,7 +32,7 @@ export default class AmountEditor extends Component {
         <Button transparent onPress={onDecrement}>
           <Icon name='remove' />
         </Button>
-        <TextInput keyboardType='numeric' value={amount}
+        <TextInput keyboardType='numeric' value={amount} style={{borderWidth: 0}}
           onChangeText={(text) => onUpdate(text)} />
         <Button transparent onPress={onIncrement}>
           <Icon name='add' />

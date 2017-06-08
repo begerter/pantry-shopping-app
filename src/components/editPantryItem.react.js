@@ -13,10 +13,10 @@ const initialState = {
   description: '',
   units: '',
   amount: '',
-  time: ''
+  time: null
 };
 
-export default class AddItemToPantry extends ModalEditor {
+export default class ShoppingList extends ModalEditor {
   constructor(props) {
     super(props);
 
@@ -59,19 +59,32 @@ export default class AddItemToPantry extends ModalEditor {
       <AmountEditor key='amount' onUpdate={(amount) => this.setState({amount: amount})} value={this.state.amount}/>,
       <Item underline key='units'>
         <Label>Units</Label>
-        <Input value={this.state.units}
+        <Input value={this.state.units} style={{textAlign: 'center'}}
           onChangeText={(unit) => this.setState({units: unit})} />
       </Item>,
       <UnitQuickSelectors onUpdate={(unit) => this.setState({units: unit})} key='quickUnits'/>,
-      <TimeEditor onUpdate={(date) => this.setState({time: date})} value={this.state.time} />,
-      <TimeQuickSelectors onUpdate={this.setTime.bind(this)} />
+      <TimeEditor onUpdate={(date) => this.setState({time: date})} value={this.state.time} key='time'/>,
+      <TimeQuickSelectors onUpdate={this.setTime.bind(this)} onClear={this.clearTime.bind(this)} key='quickTime'/>
     ];
+
+    if (!this.props.editingItem) {
+      items.push(
+        <Item underline key='description'>
+          <Label>Description</Label>
+          <Input onChangeText={(text) => this.setState({description: text})} value={this.state.description} />
+        </Item>
+      );
+    }
 
     return items;
   }
 
   setTime(increment, unit) {
-    this.setState({time: moment().add(increment, unit).format('L')})
+    this.setState({time: moment().add(increment, unit).format('L')});
+  }
+
+  clearTime() {
+    this.setState({time: null});
   }
 
   doAction() {
@@ -90,6 +103,6 @@ export default class AddItemToPantry extends ModalEditor {
       itemIndexToRemove = this.props.editingItem.index;
     }
 
-    this.props.saveFunc(newItem, itemIndexToRemove ? itemIndexToRemove : null);
+    this.props.saveFunc(newItem, itemIndexToRemove);
   }
 }

@@ -5,11 +5,12 @@ const FOOD_TYPES = {
 };
 
 export default class Food {
-  constructor(description, amount, units, type, index) {
+  constructor(description, amount, units, time, type, index) {
     this.description = description;
     this.amount = amount;
     this.units = units;
     this.type = type;
+    this.time = time;
     this.index = index;
   }
 

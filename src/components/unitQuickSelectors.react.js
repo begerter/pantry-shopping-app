@@ -4,10 +4,15 @@ import { Button, Item, Grid, Col } from 'native-base';
 
 const quickUnits = ['oz', 'qt', 'cup', 'pint', 'g', 'tbsp'];
 
+const quickSelectorStyle = {
+  marginTop: 5,
+  marginBottom: 10
+};
+
 export default class UnitQuickSelectors extends Component {
   render() {
     return (
-      <Item>
+      <Item style={quickSelectorStyle}>
         {this.renderUnitButtons()}
       </Item>
     );

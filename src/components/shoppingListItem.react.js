@@ -6,7 +6,7 @@ const iconButtonStyle = {
   backgroundColor: '#FFF'
 };
 
-export default class FoodItem extends Component {
+export default class ShoppingListItem extends Component {
   render() {
     const onRemove = this.removeItem.bind(this);
     const onEdit = this.editItem.bind(this);

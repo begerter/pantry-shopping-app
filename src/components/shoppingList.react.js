@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Text } from 'react-native';
-import FoodItem from './foodItem.react';
+import ShoppingListItem from './shoppingListItem.react';
 import { List, Container, Footer, Button, Body, Icon } from 'native-base';
 
-export default class FoodList extends Component {
+export default class ShoppingList extends Component {
   render() {
     const showAdd = this.showAddFunc.bind(this);
 
@@ -11,8 +11,10 @@ export default class FoodList extends Component {
       <Container>
         <List dataArray={this.props.data}
           renderRow={(item) =>
-            <FoodItem foodItem={item}
-              removeItem={this.props.onRemove} editItem={this.props.onEdit} transferItem={this.props.onTransfer} />
+            <ShoppingListItem foodItem={item}
+              removeItem={this.props.onRemove}
+              editItem={this.props.onEdit}
+              transferItem={this.props.onTransfer} />
           }>
         </List>
         <Footer>

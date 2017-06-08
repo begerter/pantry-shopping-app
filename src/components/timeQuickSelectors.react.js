@@ -22,10 +22,20 @@ const quickTimes = [
   }
 ];
 
+const quickSelectorStyle = {
+  marginTop: 5,
+  marginBottom: 10,
+  borderWidth: 0
+};
+
 export default class TimeQuickSelectors extends Component {
   render() {
     return (
-      <Item>
+      <Item style={quickSelectorStyle} key='timeQuickSelectors'>
+        <Button small light style={{marginRight: 5}} key='none'
+          onPress={this.props.onClear}>
+          <Text>none</Text>
+        </Button>
         {this.renderTimeButtons()}
       </Item>
     );
