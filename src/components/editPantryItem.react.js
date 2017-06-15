@@ -6,7 +6,7 @@ import UnitQuickSelectors from './unitQuickSelectors.react';
 import TimeEditor from './timeEditor.react';
 import TimeQuickSelectors from './timeQuickSelectors.react';
 import { Item, Label, Input } from 'native-base';
-import { FOOD_TYPES } from '../models/food';
+import { ITEM_TYPES } from '../models/item';
 import moment from 'moment';
 
 const initialState = {
@@ -37,7 +37,7 @@ export default class EditPantryItem extends ModalEditor {
   }
 
   getModalHeaderText() {
-    if (this.props.editingItem && this.props.editingItem.type === FOOD_TYPES.shopping) {
+    if (this.props.editingItem && this.props.editingItem.type === ITEM_TYPES.shopping) {
       return `Move ${this.props.editingItem.description} to pantry`;
     } else if (this.props.editingItem) {
       return 'Edit Pantry Item';
@@ -46,7 +46,7 @@ export default class EditPantryItem extends ModalEditor {
   }
 
   getActionButtonText() {
-    if (this.props.editingItem && this.props.editingItem.type === FOOD_TYPES.shopping) {
+    if (this.props.editingItem && this.props.editingItem.type === ITEM_TYPES.shopping) {
       return 'Move';
     } else if (this.props.editingItem) {
       return 'Save';
@@ -97,7 +97,7 @@ export default class EditPantryItem extends ModalEditor {
 
     let itemIndexToRemove = null;
     // only keep index around if editing, not if moving or adding
-    if (this.props.editingItem && this.props.editingItem.type === FOOD_TYPES.pantry) {
+    if (this.props.editingItem && this.props.editingItem.type === ITEM_TYPES.pantry) {
       newItem.index = this.props.editingItem.index;
     } else if (this.props.editingItem) {
       itemIndexToRemove = this.props.editingItem.index;

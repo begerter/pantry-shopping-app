@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
-import { Text } from 'react-native';
+import { Text, AsyncStorage } from 'react-native';
 import { Container, Content, Tab, Tabs, Title, Header } from 'native-base';
 import ShoppingList from './components/shoppingList.react';
 import EditShoppingListItem from './components/editShoppingListItem.react';
 import PantryList from './components/pantryList.react';
 import EditPantryItem from './components/editPantryItem.react';
 import ConsumePantryItem from './components/consumePantryItem.react';
-import Food, { FOOD_TYPES } from './models/food';
+import Item, { ITEM_TYPES, deserializeItem } from './models/item';
+import { storage, saveShoppingList, savePantryList } from './models/storage';
 
 function removeIndexFromList(list, index) {
   const newData = [];
@@ -28,13 +29,24 @@ export default class App extends Component {
       addToPantryModalOpen: false,
       consumeFromPantryModalOpen: false,
       shoppingListData: [],
-      pantryData: [new Food('milk', '3', 'pnt', '06/10/2017', FOOD_TYPES.pantry, 1)
-    ]
+      pantryData: []
     };
 
-    this.shoppingItemIndex = 1;
-    this.pantryItemIndex = 2;
-    //this.pantryItemIndex = 1;
+    storage.load({
+      key: 'shoppingList'
+    }).then(shoppingListData => {
+      this.setState({shoppingListData: shoppingListData.map(deserializeItem)});
+    }).catch(err => {
+      // do nothing for now
+    });
+
+    storage.load({
+      key: 'pantryList'
+    }).then(pantryData => {
+      this.setState({pantryData: pantryData.map(deserializeItem)})
+    }).catch(err => {
+      // do nothing for now
+    });
   }
 
   render() {
@@ -87,12 +99,11 @@ export default class App extends Component {
         if (datum.index !== data.index) {
           return datum;
         } else {
-          return new Food(data.description, data.amount, data.units, null, FOOD_TYPES.shopping, data.index);
+          return new Item(data.description, data.amount, data.units, null, ITEM_TYPES.shopping, data.index);
         }
       }));
     } else {
-      const foodItem = new Food(data.description, data.amount, data.units, null, FOOD_TYPES.shopping, this.shoppingItemIndex);
-      this.shoppingItemIndex++;
+      const foodItem = new Item(data.description, data.amount, data.units, null, ITEM_TYPES.shopping, new Date().valueOf());
       this.state.shoppingListData.push(foodItem);
     }
 
@@ -102,12 +113,18 @@ export default class App extends Component {
       addToShoppingListModalOpen: false,
       editingItem: null
     });
+
+    saveShoppingList(newDataList? newDataList : this.state.shoppingListData);
   }
 
   removeShoppingListData(index) {
+    const newDataList = removeIndexFromList(this.state.shoppingListData, index);
+
     this.setState({
-      shoppingListData: removeIndexFromList(this.state.shoppingListData, index)
+      shoppingListData: newDataList
     });
+
+    saveShoppingList(newDataList);
   }
 
   savePantryData(data, shoppingIndexToRemove) {
@@ -119,12 +136,11 @@ export default class App extends Component {
         if (datum.index !== data.index) {
           return datum;
         } else {
-          return new Food(data.description, data.amount, data.units, data.time, FOOD_TYPES.pantry, data.index);
+          return new Item(data.description, data.amount, data.units, data.time, ITEM_TYPES.pantry, data.index);
         }
       }));
     } else {
-      const foodItem = new Food(data.description, data.amount, data.units, data.time, FOOD_TYPES.pantry, this.pantryItemIndex);
-      this.pantryItemIndex++;
+      const foodItem = new Item(data.description, data.amount, data.units, data.time, ITEM_TYPES.pantry, new Date().valueOf());
       this.state.pantryData.push(foodItem);
     }
 
@@ -138,12 +154,18 @@ export default class App extends Component {
       addToPantryModalOpen: false,
       editingItem: null
     });
+
+    saveShoppingList(shoppingListData);
+    savePantryList(newDataList? newDataList : this.state.pantryData);
   }
 
   removePantryListData(index) {
+    const newPantryList = removeIndexFromList(this.state.pantryData, index)
     this.setState({
-      pantryData: removeIndexFromList(this.state.pantryData, index),
+      pantryData: newPantryList
     });
+
+    savePantryList(newPantryList);
   }
 
   hideConsumeModal() {
@@ -172,6 +194,8 @@ export default class App extends Component {
       consumeFromPantryModalOpen: false,
       editingItem: null
     });
+
+    savePantryList(newDataList);
   }
 
   consumePantryListData(editingItem) {

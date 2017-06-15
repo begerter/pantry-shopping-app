@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Text } from 'react-native';
-import Food from '../models/food';
 import { List, Container, Footer, Button, Body, Icon, Separator, ListItem, Content } from 'native-base';
 import PantryListItem from './pantryListItem.react';
 import moment from 'moment';
