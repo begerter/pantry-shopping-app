@@ -1,3 +1,4 @@
+import convert from 'convert-units';
 
 const ITEM_TYPES = {
   shopping: 'SHOPPING',
@@ -18,11 +19,33 @@ export default class Item {
     return this.amount + ' ' + this.units + ' ' + this.description;
   }
 
+  possibleUnits() {
+    if (!this.units) {
+      return [''];
+    }
+
+    try {
+      return convert().from(this.units).possibilities();
+    } catch (e) {
+      return [this.units];
+    }
+  }
+
   removeQuantity(amount, units) {
     if (units === this.units) {
       this.amount = this.amount - amount;
     } else {
-      // do some arcane unit conversions
+      try {
+        const convertedAmt = convert(amount).from(units).to(this.units);
+        this.amount = this.amount - convertedAmt;
+
+        // clean up to a nice number
+        const bestUnit = convert(this.amount).from(this.units).toBest();
+        this.amount = convert(this.amount).from(this.units).to(bestUnit);
+        this.units = bestUnit;
+      } catch (e) {
+        // do something with this eventually
+      }
     }
   }
 
@@ -45,7 +68,7 @@ export default class Item {
 
 function deserializeItem(dataStr) {
   const data = JSON.parse(dataStr);
-  
+
   return new Item(data.description, data.amount, data.units, data.time, data.type, data.index);
 }
 

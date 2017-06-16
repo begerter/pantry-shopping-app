@@ -11,7 +11,7 @@ export default class AmountEditor extends Component {
     super(props);
 
     if (props.value) {
-      this.state = {amount: props.value};
+      this.state = {amount: props.value.toString()};
     } else {
       this.state = Object.assign({}, initialState);
     }

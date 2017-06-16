@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Modal, Text } from 'react-native';
 import ModalEditor from './modalEditor.react';
 import AmountEditor from './amountEditor.react';
+import UnitPicker from './unitPicker.react';
 import UnitQuickSelectors from './unitQuickSelectors.react';
 import { Item, Label, Input } from 'native-base';
 
@@ -41,11 +42,7 @@ export default class EditShoppingListItem extends ModalEditor {
   renderFormInputItems() {
     const items = [
       <AmountEditor key='amount' onUpdate={(amount) => this.setState({amount: amount})} value={this.state.amount}/>,
-      <Item underline key='units'>
-        <Label>Units</Label>
-        <Input value={this.state.units}
-          onChangeText={(unit) => this.setState({units: unit})} />
-      </Item>,
+      <UnitPicker key='units' onUpdate={(unit) => this.setState({units: unit})} value={this.state.units} />,
       <UnitQuickSelectors onUpdate={(unit) => this.setState({units: unit})} key='quickUnits'/>,
       <Item underline key='description'>
         <Label>Description</Label>

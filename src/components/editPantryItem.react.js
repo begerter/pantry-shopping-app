@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Modal, Text } from 'react-native';
 import ModalEditor from './modalEditor.react';
 import AmountEditor from './amountEditor.react';
+import UnitPicker from './unitPicker.react';
 import UnitQuickSelectors from './unitQuickSelectors.react';
 import TimeEditor from './timeEditor.react';
 import TimeQuickSelectors from './timeQuickSelectors.react';
@@ -40,7 +41,7 @@ export default class EditPantryItem extends ModalEditor {
     if (this.props.editingItem && this.props.editingItem.type === ITEM_TYPES.shopping) {
       return `Move ${this.props.editingItem.description} to pantry`;
     } else if (this.props.editingItem) {
-      return 'Edit Pantry Item';
+      return `Edit ${this.props.editingItem.description}`;
     }
     return 'Add to pantry';
   }
@@ -57,11 +58,7 @@ export default class EditPantryItem extends ModalEditor {
   renderFormInputItems() {
     const items = [
       <AmountEditor key='amount' onUpdate={(amount) => this.setState({amount: amount})} value={this.state.amount}/>,
-      <Item underline key='units'>
-        <Label>Units</Label>
-        <Input value={this.state.units} style={{textAlign: 'center'}}
-          onChangeText={(unit) => this.setState({units: unit})} />
-      </Item>,
+      <UnitPicker key='units' onUpdate={(unit) => this.setState({units: unit})} value={this.state.units} />,
       <UnitQuickSelectors onUpdate={(unit) => this.setState({units: unit})} key='quickUnits'/>,
       <TimeEditor onUpdate={(date) => this.setState({time: date})} value={this.state.time} key='time'/>,
       <TimeQuickSelectors onUpdate={this.setTime.bind(this)} onClear={this.clearTime.bind(this)} key='quickTime'/>

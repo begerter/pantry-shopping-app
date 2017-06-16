@@ -20,7 +20,6 @@ export default class PantryListItem extends Component {
           <Button onPress={onEdit} transparent>
             <Icon name='redo' />
           </Button>
-          
           <Button onPress={onRemove} transparent>
             <Icon name='trash' />
           </Button>

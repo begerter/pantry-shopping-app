@@ -177,14 +177,11 @@ export default class App extends Component {
 
     this.state.pantryData.forEach(pantryItem => {
       if (pantryItem.index !== data.index) {
-        newData.push(pantryItem);
+        newDataList.push(pantryItem);
       } else {
-        if (data.units === pantryItem.units && data.amount !== pantryItem.amount) {
-          pantryItem.amount = pantryItem.amount - data.amount;
-          newData.push(pantryItem);
-        } else if (data.units !== pantryItem.units) {
-          // todo: unit conversions
-          newData.push(pantryItem);
+        pantryItem.removeQuantity(data.amount, data.units);
+        if (pantryItem.amount > 0) {
+          newDataList.push(pantryItem);
         }
       }
     });

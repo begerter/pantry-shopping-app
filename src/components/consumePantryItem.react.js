@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Modal, Text } from 'react-native';
 import ModalEditor from './modalEditor.react';
 import AmountEditor from './amountEditor.react';
+import UnitPicker from './unitPicker.react';
 import { Item, Label, Input, Picker, Button } from 'native-base';
 import convert from 'convert-units';
 
@@ -43,16 +44,10 @@ export default class ConsumePantryItem extends ModalEditor {
     if (this.props.editingItem) {
       const items = [
         <AmountEditor key='amount' onUpdate={(amount) => this.setState({amount: amount})} value={this.state.amount}/>,
-        <Item underline key='units'>
-          <Label>Units</Label>
-          <Picker mode='dropdown' selectedValue={this.state.units}
-            onValueChange={(unit) => this.setState({units: unit})}>
-            <Item label={this.props.editingItem.units} value={this.props.editingItem.units}
-              key={this.props.editingItem.units} />
-            {this.renderUnitPossibilities()}
-          </Picker>
-        </Item>,
-        <Item style={{textAlign: 'center'}} key='consumeAll'>
+        <UnitPicker key='units' onUpdate={(unit) => this.setState({units: unit})}
+          value={this.state.units} hideEmpty={true}
+          possibleUnits={this.props.editingItem.possibleUnits()} />,
+        <Item key='consumeAll'>
           <Button small light style={{marginRight: 5}}
             onPress={this.consumeAll.bind(this)}>
             <Text>Consume all</Text>
@@ -64,15 +59,6 @@ export default class ConsumePantryItem extends ModalEditor {
     } else {
       return [];
     }
-  }
-
-  renderUnitPossibilities() {
-    const possibleUnits = convert().from(this.props.editingItem.units).possibilities();
-    return possibleUnits.map((unit) => {
-      return (
-        <Item label={unit} value={unit} key={unit} />
-      );
-    });
   }
 
   consumeAll() {

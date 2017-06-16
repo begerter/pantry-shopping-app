@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Text } from 'react-native';
 import { Button, Item, Grid, Col } from 'native-base';
 
-const quickUnits = ['oz', 'qt', 'cup', 'pint', 'g', 'tbsp'];
+const quickUnits = ['oz', 'qt', 'cup', 'pnt', 'g', 'Tbs'];
 
 const quickSelectorStyle = {
   marginTop: 5,
