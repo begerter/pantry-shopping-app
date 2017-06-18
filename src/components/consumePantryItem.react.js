@@ -42,18 +42,27 @@ export default class ConsumePantryItem extends ModalEditor {
 
   renderFormInputItems() {
     if (this.props.editingItem) {
+      const possibleUnits = this.props.editingItem.possibleUnits();
       const items = [
-        <AmountEditor key='amount' onUpdate={(amount) => this.setState({amount: amount})} value={this.state.amount}/>,
-        <UnitPicker key='units' onUpdate={(unit) => this.setState({units: unit})}
+        <AmountEditor key='amount' onUpdate={(amount) => this.setState({amount: amount})} value={this.state.amount}/>
+      ];
+
+      if (possibleUnits.length > 0) {
+        items.push(
+          <UnitPicker key='units' onUpdate={(unit) => this.setState({units: unit})}
           value={this.state.units} hideEmpty={true}
-          possibleUnits={this.props.editingItem.possibleUnits()} />,
-        <Item key='consumeAll'>
+          possibleUnits={possibleUnits} />
+        );
+      }
+
+      items.push(
+        <Item key='consumeAll' style={{padding: 10, justifyContent: 'center'}}>
           <Button small light style={{marginRight: 5}}
             onPress={this.consumeAll.bind(this)}>
-            <Text>Consume all</Text>
+            <Text>Set to consume all</Text>
           </Button>
         </Item>
-      ];
+      );
 
       return items;
     } else {

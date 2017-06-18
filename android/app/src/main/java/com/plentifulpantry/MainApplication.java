@@ -1,7 +1,8 @@
-package com.pantry;
+package com.plentifulpantry;
 
 import android.app.Application;
 
+import com.facebook.react.BuildConfig;
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;

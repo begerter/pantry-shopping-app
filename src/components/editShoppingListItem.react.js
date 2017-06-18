@@ -36,7 +36,7 @@ export default class EditShoppingListItem extends ModalEditor {
   }
 
   getActionButtonText() {
-    return this.props.editingItem ? 'Edit Item' : 'Add Item';
+    return this.props.editingItem ? 'Save' : 'Add';
   }
 
   renderFormInputItems() {

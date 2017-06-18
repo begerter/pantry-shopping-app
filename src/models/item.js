@@ -21,7 +21,7 @@ export default class Item {
 
   possibleUnits() {
     if (!this.units) {
-      return [''];
+      return [];
     }
 
     try {

@@ -8,7 +8,7 @@ export default class UnitPicker extends Component {
     let emptyItem = <Picker.Item label='' value='' key='' />;
 
     if (this.props.hideEmpty) {
-      emptyItem = null;
+      emptyItem = [];
     }
 
     return (

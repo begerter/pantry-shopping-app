@@ -1,4 +1,4 @@
-package com.pantry;
+package com.plentifulpantry;
 
 import com.facebook.react.ReactActivity;
 
